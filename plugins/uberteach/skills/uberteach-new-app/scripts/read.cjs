@@ -57,7 +57,8 @@ async function main() {
       .split(/\n(?=## )/)
       .find((s) => s.startsWith('## ') && chapterOf(s) === want);
     if (!section) fail(`契約裡沒有第 ${want} 章。不加章號執行可以看目錄。`);
-    process.stdout.write(`${section}\n`);
+    // An end line the agent can look for: without it, a cut-off chapter looks like a short one.
+    process.stdout.write(`${section.trimEnd()}\n\n（第 ${want} 章到此結束）\n`);
     return;
   }
   if (what === 'skills') {
@@ -70,7 +71,7 @@ async function main() {
   if (what === 'skill' && arg) {
     const { text, skills } = await get(`/api/v1/skills/${encodeURIComponent(arg)}`);
     console.log(`官方 skill 版本：${skills}`);
-    process.stdout.write(text);
+    process.stdout.write(`${text.trimEnd()}\n\n（skill ${arg} 全文到此結束）\n`);
     return;
   }
   fail('用法：read.cjs contract [章號] | skills | skill <名稱>');

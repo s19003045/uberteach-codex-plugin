@@ -9,17 +9,24 @@ description: 在 UberTeach 平台做一個新的院內工具時用：查有沒�
 
 `<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`）。
 
+**一個指令只讀一章**（兩章放在同一個指令裡，加起來就超過讀取工具的上限，會被截掉）。
+每一章的輸出最後一行是「（第 N 章到此結束）」；**沒看到這一行、或看到 `truncated`／`omitted` 之類的省略標記，就單獨再讀那一章**，不要憑記憶補。
+
 ## 做法
 
 1. 讀專案生命週期與怎麼跟使用者說話，照著做：
    ```
    node "<這個資料夾>/scripts/read.cjs" contract 2
+   ```
+   ```
    node "<這個資料夾>/scripts/read.cjs" contract 2.5
    ```
 2. 寫 `app-manifest.yml` 之前，先用 `uberteach-classify`（分級問診）。
 3. 選做法：列出官方 skill，挑合用的讀全文（讀到的是平台**目前發佈**的版本）：
    ```
    node "<這個資料夾>/scripts/read.cjs" skills
+   ```
+   ```
    node "<這個資料夾>/scripts/read.cjs" skill <名稱>
    ```
    這個 plugin 裡的 `uberteach-<名稱>` skill 也會帶你讀同一份。

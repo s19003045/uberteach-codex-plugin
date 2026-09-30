@@ -9,10 +9,15 @@ description: UberTeach 工具要存到雲端檢核、發佈試用版或正式版
 
 ```
 node "<這個資料夾>/scripts/read.cjs" contract 4
+```
+```
 node "<這個資料夾>/scripts/read.cjs" contract 6
 ```
 
 `<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`）。
+
+**一個指令只讀一章**（兩章放在同一個指令裡，加起來就超過讀取工具的上限，會被截掉）。
+每一章的輸出最後一行是「（第 N 章到此結束）」；**沒看到這一行、或看到 `truncated`／`omitted` 之類的省略標記，就單獨再讀那一章**，不要憑記憶補。
 
 ## 做法
 
