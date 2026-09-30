@@ -1,0 +1,37 @@
+---
+name: uberteach-connect
+description: 使用者貼上 UberTeach 平台「連接 AI 助手」頁的文字、給了 XXXX-XXXX 設定碼，或說要在院內平台做工具、改工具時，第一個用這份：連上平台、確認身分。
+---
+
+# 連接 UberTeach 平台
+
+**規則只有一份：平台上的契約（llms.txt）。**這份 skill 不重複規則，只告訴你讀哪幾章、用哪支附帶的指令。
+契約整份約 100 KB，你的讀取工具會截掉中間——**一律一章一章讀**，不要整份抓。
+
+指令裡的 `<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`）。
+附帶的指令在 `<這個資料夾>/scripts/`。
+
+## 做法
+
+1. 讀鐵律與快速開始，照著做：
+   ```
+   node "<這個資料夾>/scripts/read.cjs" contract 0
+   node "<這個資料夾>/scripts/read.cjs" contract 1
+   ```
+   第一行印出的「契約版本」記下來：之後任何平台回應的 `X-Docs-Version` 跟它不同，就重讀正在用的那一章。
+2. 第 1 章要你用設定碼執行那串 `node -e` 指令時，**改執行這支**（效果完全相同：金鑰直接寫進檔案，畫面上只印存檔位置與名字）：
+   ```
+   node "<這個資料夾>/scripts/bootstrap.cjs" XXXX-XXXX
+   ```
+   第 1 章其他步驟照做——特別是用設定碼**之前**先確認寫得進 `~/.uberteach`（步驟 0）、之後把名字唸給使用者確認。
+3. 第一個連平台的指令就失敗（連不上、憑證錯誤）：讀第 0.5 章。
+4. 收到錯誤碼：讀第 9 章。
+
+找不到 `scripts/` 或指令跑不起來，就照契約第 1 章原本的指令做，結果一樣；**不要自己改寫指令**。
+
+## 接下來
+
+- 要做新工具 → `uberteach-new-app`
+- 寫或改 `app-manifest.yml`、談到資料或等級 → `uberteach-classify`
+- 使用者說「發佈」「放上去」→ `uberteach-publish`
+- 目錄（每一章在講什麼、什麼時候讀）：`node "<這個資料夾>/scripts/read.cjs" contract`
