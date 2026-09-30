@@ -9,8 +9,7 @@
 ## 安裝
 
 - **院方 ChatGPT 工作區的帳號**：工作區管理員已經裝好，開一個新對話就能用。
-- **個人帳號**：
-  ```
-  codex plugin marketplace add https://github.com/s19003045/uberteach-codex-plugin
-  ```
-  或請 AI 助手代裝。裝好之後要**開一個新的對話**才看得到。
+- **個人帳號**：ChatGPT 桌面版 → 設定 → Plugins → 右上角 **Add → Add a marketplace**
+  - Source：`s19003045/uberteach-codex-plugin`
+  - Git ref、Sparse paths：**都留空**（框裡的灰字只是範例）
+  - 按 Add marketplace，在清單裡找「UberTeach 院內工具平台」安裝，然後**開一個新的對話**。
