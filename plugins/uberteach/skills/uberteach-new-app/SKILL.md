@@ -30,7 +30,8 @@ description: 在 UberTeach 平台做一個新的院內工具時用：查有沒�
    node "<這個資料夾>/scripts/read.cjs" skill <名稱>
    ```
    這個 plugin 裡的 `uberteach-<名稱>` skill 也會帶你讀同一份。
-4. 第 2 章要你執行建立應用的那串 `node -e` 指令時，**改執行這支**（效果相同：專案鑰匙直接寫進 `~/.uberteach/git/<slug>`，只印存檔位置）：
+4. 第 2 章要你執行建立應用的那串 `node -e` 指令時，**改執行這支，而且直接用要求提高權限的方式**（它要寫使用者家目錄，一般沙箱寫不進去；
+   它自己會先試寫，寫不進去就停、**不建立應用**）。效果相同：專案鑰匙直接寫進 `~/.uberteach/git/<slug>`，只印存檔位置：
    ```
    node "<這個資料夾>/scripts/create-app.cjs" <金鑰檔完整路徑> <slug> <A|B> "<名稱>" "<一句話說明>"
    ```
