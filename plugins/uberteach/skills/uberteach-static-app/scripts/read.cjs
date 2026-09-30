@@ -5,12 +5,18 @@
 //
 //   node read.cjs contract          the table of contents
 //   node read.cjs contract 3        one chapter (3, 0.5, 4.55 …; "## 3." also works)
+//   node read.cjs contract 0        chapter 0, and first a line saying whether this plugin is the latest
 //   node read.cjs skills            the published official skills
 //   node read.cjs skill form-app    one skill's full text (the published version)
 //
-// PLATFORM is replaced with the real address when the plugin is built (scripts/plugin-build.mjs).
+// PLATFORM, PLUGIN_VERSION and LATEST_URL are filled in when the plugin is built
+// (scripts/plugin-build.mjs).
 'use strict';
 const PLATFORM = 'https://platform.deepwaterslife.com';
+/** The version this copy was built as (plugin.json). */
+const PLUGIN_VERSION = '2026.9.4';
+/** plugin.json in the repo people install from; '' or unfilled = no check. */
+const LATEST_URL = 'https://raw.githubusercontent.com/s19003045/uberteach-codex-plugin/main/plugins/uberteach/plugin.json';
 
 const [what, arg] = process.argv.slice(2);
 
@@ -43,8 +49,37 @@ const chapterOf = (s) =>
     .split(/\s/)[0]
     .replace(/\.$/, '');
 
+/**
+ * Installed plugins never update themselves and the desktop app has no refresh button
+ * (2026-09-30), so an old copy can stay for months. Chapter 0 is the first thing every connect
+ * reads: say there whether a newer one is out. Advisory — a failed look never stops the read.
+ * Versions are compared for equality only, like every version in this project.
+ */
+async function pluginNotice() {
+  if (!LATEST_URL || LATEST_URL.startsWith('@@')) return;
+  try {
+    const res = await fetch(LATEST_URL, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const latest = (await res.json()).version;
+    if (!latest) throw new Error('沒有 version');
+    if (latest === PLUGIN_VERSION) {
+      console.log(`（UberTeach plugin ${PLUGIN_VERSION}，是最新版）`);
+    } else {
+      console.log(
+        `（UberTeach plugin 有新版：這台電腦裝的是 ${PLUGIN_VERSION}，最新是 ${latest}。` +
+          '照 uberteach-connect「plugin 有新版時」那一段告訴使用者，不要中斷手上的事）',
+      );
+    }
+  } catch (err) {
+    console.log(
+      `（查不到 UberTeach plugin 的最新版本：${err.cause?.code ?? err.message}；這次略過，不影響使用）`,
+    );
+  }
+}
+
 async function main() {
   if (what === 'contract') {
+    if (arg && chapterOf(arg) === '0') await pluginNotice();
     const { text, docs } = await get('/llms.txt');
     console.log(`契約版本：${docs}（平台回應的 X-Docs-Version 與這個不同時，重讀要用的章節）`);
     if (!arg) {
