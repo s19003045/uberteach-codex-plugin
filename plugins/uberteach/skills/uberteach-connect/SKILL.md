@@ -14,7 +14,7 @@ description: 使用者貼上 UberTeach 平台「連接 AI 助手」頁的文字�
 **一個指令只讀一章**（兩章放在同一個指令裡，加起來就超過讀取工具的上限，會被截掉）。
 每一章的輸出最後一行是「（第 N 章到此結束）」；**沒看到這一行、或看到 `truncated`／`omitted` 之類的省略標記，就單獨再讀那一章**，不要憑記憶補。
 
-指令裡的 `<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`），長得像 `~/.codex/plugins/cache/uberteach/uberteach/<版本>/skills/<skill 名稱>`——**照這份 SKILL.md 實際的路徑填，不要自己拼**。每一份 UberTeach skill 的 `scripts/read.cjs` 都一樣，這份的找不到就用 `uberteach-connect` 那份的（2026-10-01 第 171 項）。
+指令裡的 `<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`），長得像 `~/.codex/plugins/cache/uberteach/uberteach/<版本>/skills/<skill 名稱>`（Codex）或 `~/.claude/plugins/cache/uberteach/uberteach/<版本>/skills/<skill 名稱>`（Claude Code）——**照這份 SKILL.md 實際的路徑填，不要自己拼**。每一份 UberTeach skill 的 `scripts/read.cjs` 都一樣，這份的找不到就用 `uberteach-connect` 那份的（2026-10-01 第 171 項）。
 附帶的指令在 `<這個資料夾>/scripts/`。
 
 ## 做法
@@ -29,7 +29,7 @@ description: 使用者貼上 UberTeach 平台「連接 AI 助手」頁的文字�
    ```
    第一行印出的「契約版本」記下來：之後任何平台回應的 `X-Docs-Version` 跟它不同，就重讀正在用的那一章。
 2. 第 1 章的**第 0 步（試寫 `~/.uberteach`）和第 1 步（用設定碼連接）合成一步**：**直接用要求提高權限的方式**執行這支
-   （Codex：`sandbox_permissions: "require_escalated"`），**不要先在一般沙箱跑**——`~/.uberteach` 在使用者家目錄，一般沙箱一定寫不進去：
+   （Codex：`sandbox_permissions: "require_escalated"`；Claude Code：有開沙箱就用 `dangerouslyDisableSandbox: true`，沒開就照常執行、由使用者在權限詢問按允許），**不要先在一般沙箱跑**——`~/.uberteach` 在使用者家目錄，一般沙箱一定寫不進去：
    ```
    node "<這個資料夾>/scripts/bootstrap.cjs" XXXX-XXXX
    ```
@@ -55,16 +55,27 @@ description: 使用者貼上 UberTeach 平台「連接 AI 助手」頁的文字�
 - 「是最新版」或「查不到最新版本」：什麼都不用做。
 - **「有新版」：不要中斷手上的事**，舊版照樣能用。找一個不打斷他的時候（剛連上、或這次的事做完）用白話說**一次**：
   「幫你做工具的 UberTeach 外掛有新版，更新後比較不會出錯。要我幫你更新嗎？更新完要把 ChatGPT 完全關掉再打開，才會換成新版。」
-- 他說好：**用要求提高權限的方式**執行（會動到使用者的設定資料夾，核准視窗會跳出來）：
+  （在 Claude Code 裡，把「ChatGPT」換成「Claude」。）
+- 他說好：**用要求提高權限的方式**執行（會動到使用者的設定資料夾，核准視窗會跳出來）。
+
+  **Codex（ChatGPT）**：
   ```
   codex plugin marketplace upgrade uberteach
   ```
   - 出現 `unknown variant 'priority'`：同一行後面加 `-c service_tier='"fast"'` 再跑一次。
   - 出現 `SEC_E_NO_CREDENTIALS`：只對這一次指令設 `GIT_CONFIG_COUNT=1`、`GIT_CONFIG_KEY_0=http.sslBackend`、`GIT_CONFIG_VALUE_0=openssl`，跑完移除。
   - 回「already up to date」或 `missing plugin.json`，**不代表沒更新**，一樣請他完全重開 ChatGPT 再看版本。**不要手動刪或改外掛的快取資料夾。**
-- 更新完：請他**這次的事做完之後**，把 ChatGPT 完全關掉（Windows：工作管理員結束 ChatGPT）再打開，
-  到「設定 → Plugins → UberTeach 院內工具平台」最下面的 **Version** 看是不是新的版本號。
-- 指令跑不起來、或他不想現在弄：告訴他「設定 → Plugins 把 UberTeach 移除，再照平台『連接 AI 助手』頁的說明重裝」也可以。
+  - 更新完：請他**這次的事做完之後**，把 ChatGPT 完全關掉（Windows：工作管理員結束 ChatGPT）再打開，
+    到「設定 → Plugins → UberTeach 院內工具平台」最下面的 **Version** 看是不是新的版本號。
+  - 指令跑不起來、或他不想現在弄：告訴他「設定 → Plugins 把 UberTeach 移除，再照平台『連接 AI 助手』頁的說明重裝」也可以。
+
+  **Claude Code**：
+  ```
+  claude plugin update uberteach@uberteach
+  ```
+  - 印出「updated from … to …」就是換好了；請他**這次的事做完之後**把 Claude 完全關掉再打開。之後用 `claude plugin list` 看 `uberteach@uberteach` 的 Version。
+  - 回「already at the latest version」卻還是舊版號：先跑 `claude plugin marketplace update uberteach`，再跑一次上面那行。
+  - 指令跑不起來：`claude plugin uninstall uberteach@uberteach`，再 `claude plugin install uberteach@uberteach`。**不要手動刪或改外掛的快取資料夾。**
 
 ## 接下來
 
