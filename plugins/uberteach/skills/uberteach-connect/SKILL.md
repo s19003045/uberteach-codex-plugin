@@ -64,6 +64,8 @@ description: 使用者貼上 UberTeach 平台「連接 AI 助手」頁的文字�
 
 ## 接下來
 
+- **使用者問「現在打得開嗎」「在哪裡看」「手機能看嗎」**：先用 `GET /apps/{slug}` 查，不要只看本機——
+  試用版網址在 `playground.url`（上次發佈的那一版；本機剛改的要重新發佈才看得到），正式區在 `url`（2026-10-01 第 174 項）
 - 要做新工具 → `uberteach-new-app`
 - 寫或改 `app-manifest.yml`、談到資料或等級 → `uberteach-classify`
 - 使用者說「發佈」「放上去」→ `uberteach-publish`

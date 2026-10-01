@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "uberteach",
-  "version": "2026.9.7",
-  "description": "UberTeach 院內工具平台：連接、做工具、分級、發佈的做法（平台 platform.deepwaterslife.com，契約 2026.09.73，官方 skill 2026.09.9）",
+  "version": "2026.9.8",
+  "description": "UberTeach 院內工具平台：連接、做工具、分級、發佈的做法（平台 platform.deepwaterslife.com，契約 2026.09.74，官方 skill 2026.09.9）",
   "homepage": "https://platform.deepwaterslife.com",
   "extensions": {
     "com.openai": {
