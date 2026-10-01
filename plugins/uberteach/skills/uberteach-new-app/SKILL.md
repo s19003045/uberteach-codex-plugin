@@ -7,7 +7,7 @@ description: 在 UberTeach 平台做一個新的院內工具時用：查有沒�
 
 **規則只有一份：平台上的契約（llms.txt）。**這份 skill 只告訴你讀哪幾章、用哪支附帶的指令。一律一章一章讀。
 
-`<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`）。
+`<這個資料夾>` 是這份 SKILL.md 所在的資料夾（完整路徑去掉 `SKILL.md`；Windows 也用 `/`），長得像 `~/.codex/plugins/cache/uberteach/uberteach/<版本>/skills/<skill 名稱>`——**照這份 SKILL.md 實際的路徑填，不要自己拼**。每一份 UberTeach skill 的 `scripts/read.cjs` 都一樣，這份的找不到就用 `uberteach-connect` 那份的（2026-10-01 第 171 項）。
 
 **一個指令只讀一章**（兩章放在同一個指令裡，加起來就超過讀取工具的上限，會被截掉）。
 每一章的輸出最後一行是「（第 N 章到此結束）」；**沒看到這一行、或看到 `truncated`／`omitted` 之類的省略標記，就單獨再讀那一章**，不要憑記憶補。
@@ -22,6 +22,9 @@ description: 在 UberTeach 平台做一個新的院內工具時用：查有沒�
    node "<這個資料夾>/scripts/read.cjs" contract 2.5
    ```
 2. 寫 `app-manifest.yml` 之前，先用 `uberteach-classify`（分級問診）。
+   **動手寫頁面內容之前**先問他要不要上網找參考資料；查到的事實（規定、時間、別院的作法）**先唸給他確認**才寫進去——
+   加一句「以本院規範為準」不等於問過他（2026-10-01 第 175 項）。細節在第 2 章。
+   要用 `UberTeach.me({require:"workspace"})` 擋外人時，先看第 4.5 章：他自己用 Gmail 登入的話，他自己也會被擋，**寫之前先問他**（第 173 項）。
 3. 選做法：列出官方 skill，挑合用的讀全文（讀到的是平台**目前發佈**的版本）：
    ```
    node "<這個資料夾>/scripts/read.cjs" skills
